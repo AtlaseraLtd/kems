@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import '../models/card_model.dart';
 import '../models/deck_model.dart';
@@ -64,7 +63,7 @@ class _GameScreenState extends State<GameScreen>
 
   void _startDealTimer() {
     _dealTimer?.cancel();
-    setState(() => _countdown = 3);
+    setState(() => _countdown = 5);
 
     _dealTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_showWinOverlay || _isPaused) return;
@@ -137,6 +136,7 @@ class _GameScreenState extends State<GameScreen>
       _selectedPlayerIndex =
       (_selectedPlayerIndex == index) ? null : index;
     });
+    _resetDealTimer();
   }
 
   void _onTableCardTap(int index) {
@@ -255,20 +255,9 @@ class _GameScreenState extends State<GameScreen>
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
-
-          // ── Background ──
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/poker-table.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned.fill(
-            child: Container(
-                color: Colors.black.withValues(alpha: 0.25)),
-          ),
 
           // ── Main layout ──
           SafeArea(
@@ -277,8 +266,8 @@ class _GameScreenState extends State<GameScreen>
                 final availableHeight = constraints.maxHeight;
                 final scoreBarHeight = MediaQuery.of(context).padding.top + 70.0;
                 final remainingHeight = availableHeight - scoreBarHeight;
-                final zoneHeight = remainingHeight * 0.30;
-                final barHeight  = remainingHeight * 0.10;
+                final zoneHeight = (remainingHeight - 30) * 0.30;
+                final barHeight  = (remainingHeight - 30) * 0.10;
                 final cardWidth  = (screenWidth - (3 * 6) - 32) / 4;
                 final cardHeight =
                 (cardWidth * 1.4).clamp(0.0, zoneHeight * 0.80);
@@ -289,7 +278,7 @@ class _GameScreenState extends State<GameScreen>
                   child: Column(
                     children: [
 
-                      // ── Score bar ──
+                      // ── Score bar (black, no background image) ──
                       _ScoreBar(
                         round: _currentRound,
                         totalRounds: totalRounds,
@@ -299,39 +288,58 @@ class _GameScreenState extends State<GameScreen>
                         lastRoundPlayerWon: _lastRoundPlayerWon,
                       ),
 
-                      // ── Computer zone ──
-                      _StaticCardZone(
-                        height: zoneHeight,
-                        width: screenWidth,
-                        cards: _computerHand,
-                        cardWidth: cardWidth,
-                        cardHeight: cardHeight,
+                      // ── Game area with poker table background ──
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            // Background only covers this area
+                            Positioned.fill(
+                              child: Image.asset(
+                                'assets/images/poker-table.png',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: Container(
+                                  color: Colors.black.withValues(alpha: 0.25)),
+                            ),
+
+                            // Card zones
+                            Column(
+                              children: [
+                                _StaticCardZone(
+                                  height: zoneHeight,
+                                  width: screenWidth,
+                                  cards: _computerHand,
+                                  cardWidth: cardWidth,
+                                  cardHeight: cardHeight,
+                                ),
+                                _TappableCardZone(
+                                  height: zoneHeight,
+                                  width: screenWidth,
+                                  cards: _tableCards,
+                                  cardWidth: cardWidth,
+                                  cardHeight: cardHeight,
+                                  onCardTap: _selectedPlayerIndex != null
+                                      ? _onTableCardTap
+                                      : null,
+                                ),
+                                _PlayerCardZone(
+                                  height: zoneHeight,
+                                  width: screenWidth,
+                                  cards: _playerHand,
+                                  cardWidth: cardWidth,
+                                  cardHeight: cardHeight,
+                                  selectedIndex: _selectedPlayerIndex,
+                                  onCardTap: _onPlayerCardTap,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
 
-                      // ── Table zone ──
-                      _TappableCardZone(
-                        height: zoneHeight,
-                        width: screenWidth,
-                        cards: _tableCards,
-                        cardWidth: cardWidth,
-                        cardHeight: cardHeight,
-                        onCardTap: _selectedPlayerIndex != null
-                            ? _onTableCardTap
-                            : null,
-                      ),
-
-                      // ── Player zone ──
-                      _PlayerCardZone(
-                        height: zoneHeight,
-                        width: screenWidth,
-                        cards: _playerHand,
-                        cardWidth: cardWidth,
-                        cardHeight: cardHeight,
-                        selectedIndex: _selectedPlayerIndex,
-                        onCardTap: _onPlayerCardTap,
-                      ),
-
-                      // ── Bottom bar ──
+                      // ── Bottom bar (black, no background image) ──
                       _BottomBar(
                         height: barHeight,
                         isPaused: _isPaused,
@@ -383,13 +391,13 @@ class _GameScreenState extends State<GameScreen>
           if (_isPaused)
             Positioned.fill(
               child: Container(
-                color: Colors.black.withOpacity(0.6),
+                color: Colors.black.withValues(alpha: 0.6),
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        '⏸ Paused',
+                        'Paused',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 36,
@@ -399,18 +407,20 @@ class _GameScreenState extends State<GameScreen>
                       const SizedBox(height: 16),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green.shade700,
+                          backgroundColor: Color(0xFFf64900),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 40, vertical: 14),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30)),
                         ),
+                        // Resume button
                         onPressed: _togglePause,
-                        child: const Text('Resume',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),
+                          child: Image.asset(
+                            'assets/images/icons/play.png',
+                            width: 24,
+                            height: 24,
+                            color: Colors.white,
+                          ),
                       ),
                     ],
                   ),
@@ -477,10 +487,10 @@ class _ScoreBar extends StatelessWidget {
               Row(children: List.generate(3, (i) {
                 final isLastWin = i == playerWins - 1;
                 final color = (isLastWin && lastRoundPlayerWon == true)
-                    ? Colors.green
+                    ? const Color(0xFF269E03)
                     : (isLastWin && lastRoundPlayerWon == false)
-                    ? Colors.red
-                    : Colors.green;
+                    ? const Color(0xFFFA0505)
+                    : const Color(0xFF269E03);
                 return _dot(i < playerWins, color);
               })),
             ],
@@ -488,10 +498,10 @@ class _ScoreBar extends StatelessWidget {
           Column(
             children: [
               Text(
-                'Round $round out of $totalRounds',
+                'Round $round',
                 style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
@@ -499,9 +509,9 @@ class _ScoreBar extends StatelessWidget {
                 'Deal in $countdown',
                 style: TextStyle(
                   color: countdown <= 3
-                      ? Colors.red
+                      ? const Color(0xFFFA0505)
                       : countdown == 5
-                      ? Colors.orange
+                      ? const Color(0xFFFAC105)
                       : Colors.white54,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
@@ -521,10 +531,10 @@ class _ScoreBar extends StatelessWidget {
               Row(children: List.generate(3, (i) {
                 final isLastWin = i == computerWins - 1;
                 final color = (isLastWin && lastRoundPlayerWon == false)
-                    ? Colors.green
+                    ? const Color(0xFF269E03)
                     : (isLastWin && lastRoundPlayerWon == true)
-                    ? Colors.red
-                    : Colors.green;
+                    ? const Color(0xFFFA0505)
+                    : const Color(0xFF269E03);
                 return _dot(i < computerWins, color);
               })),
             ],
@@ -560,7 +570,7 @@ class _StaticCardZone extends StatelessWidget {
         children: cards.map((card) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 3),
           child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 600),
+            duration: const Duration(milliseconds: 200),
             transitionBuilder: (child, animation) => ScaleTransition(
               scale: animation,
               child: FadeTransition(opacity: animation, child: child),
@@ -609,7 +619,7 @@ class _TappableCardZone extends StatelessWidget {
             child: GestureDetector(
               onTap: () => onCardTap?.call(i),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 200),
                 decoration: isSwappable
                     ? BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
@@ -624,7 +634,7 @@ class _TappableCardZone extends StatelessWidget {
                 )
                     : null,
                 child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 600),
+                  duration: const Duration(milliseconds: 200),
                   transitionBuilder: (child, animation) => ScaleTransition(
                     scale: animation,
                     child:
@@ -677,7 +687,7 @@ class _PlayerCardZone extends StatelessWidget {
           return GestureDetector(
             onTap: () => onCardTap(i),
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 200),
               curve: Curves.easeOut,
               margin: EdgeInsets.only(
                 left: 3,
@@ -698,7 +708,7 @@ class _PlayerCardZone extends StatelessWidget {
               )
                   : null,
               child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 600),
+                duration: const Duration(milliseconds: 200),
                 transitionBuilder: (child, animation) => ScaleTransition(
                   scale: animation,
                   child: FadeTransition(opacity: animation, child: child),
@@ -733,28 +743,34 @@ class _BottomBar extends StatelessWidget {
   });
 
   @override
-  @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
     return Container(
-      height: height,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      color: Colors.black,
+      padding: EdgeInsets.only(
+        left: 12,
+        right: 12,
+        top: 6,
+        bottom: bottomPadding + 6,
+      ),
+      height: height + bottomPadding,
       child: Row(
         children: [
           Expanded(
             flex: 50,
             child: _BarButton(
-              label: isPaused ? 'Resume' : 'Pause',
-              color: isPaused ? Colors.green.shade700 : Colors.blue.shade700,
-              onTap: onPause,
-            ),
+                label: 'Quit',
+                color: const Color(0xFFf64900),
+                onTap: onQuit),
           ),
           const SizedBox(width: 8),
           Expanded(
             flex: 50,
             child: _BarButton(
-                label: 'Quit',
-                color: Colors.red,
-                onTap: onQuit),
+              label: 'Pause',
+              color: const Color(0xFFf64900),
+              onTap: onPause,
+            ),
           ),
         ],
       ),

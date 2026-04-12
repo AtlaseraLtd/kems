@@ -30,4 +30,5 @@ flutter:
   assets:
     - assets/cards/
     - assets/images/
+    - assets/images/icons/
     - assets/sounds/
