@@ -370,7 +370,7 @@ class _GameScreenState extends State<GameScreen>
                           color: Colors.green.shade800,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                              color: Colors.amber.shade400, width: 3),
+                              color: Colors.grey, width: 3),
                         ),
                         child: Text(
                           _winMessage,
