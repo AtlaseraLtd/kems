@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import '../models/card_model.dart';
 import '../models/deck_model.dart';
 import '../utils/game_logic.dart';
@@ -15,6 +16,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen>
     with TickerProviderStateMixin {
   final DeckModel _deck = DeckModel();
+  final AudioPlayer _audioPlayer = AudioPlayer();
   List<CardModel> _playerHand   = [];
   List<CardModel> _computerHand = [];
   List<CardModel> _tableCards   = [];
@@ -56,9 +58,16 @@ class _GameScreenState extends State<GameScreen>
 
   @override
   void dispose() {
+    _audioPlayer.dispose();
     _dealTimer?.cancel();
     _winAnimController.dispose();
     super.dispose();
+  }
+
+  /* This method is responsible for playing the swap sound.
+  * */
+  void _playSwapSound() async {
+    await _audioPlayer.play(AssetSource('sounds/swap-cards.wav'));
   }
 
   void _startDealTimer() {
@@ -147,6 +156,7 @@ class _GameScreenState extends State<GameScreen>
       _tableCards[index] = temp;
       _selectedPlayerIndex = null;
     });
+    _playSwapSound();
     _checkWin();
     _resetDealTimer();
   }
@@ -758,7 +768,8 @@ class _BottomBar extends StatelessWidget {
         children: [
           Expanded(
             flex: 50,
-            child: _BarButton(
+            child:
+            _BarButton(
                 label: 'Quit',
                 color: const Color(0xFFf64900),
                 onTap: onQuit),
