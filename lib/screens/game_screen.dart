@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../models/card_model.dart';
@@ -755,6 +756,7 @@ class _BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final buttonWidth = (MediaQuery.of(context).size.width - 12 - 12 - 8) / 2;
     return Container(
       color: Colors.black,
       padding: EdgeInsets.only(
@@ -766,21 +768,29 @@ class _BottomBar extends StatelessWidget {
       height: height + bottomPadding,
       child: Row(
         children: [
-          Expanded(
-            flex: 50,
-            child:
-            _BarButton(
-                label: 'Quit',
-                color: const Color(0xFFf64900),
-                onTap: onQuit),
+          AnimatedButton(
+            onPressed: onQuit,
+            color: const Color(0xFFf64900),
+            width: buttonWidth,
+            child: const Text('QUIT',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           const SizedBox(width: 8),
-          Expanded(
-            flex: 50,
-            child: _BarButton(
-              label: 'Pause',
-              color: const Color(0xFFf64900),
-              onTap: onPause,
+          AnimatedButton(
+            onPressed: onPause,
+            color: const Color(0xFFf64900),
+            width: buttonWidth,
+            child: Text('PAUSE',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],
