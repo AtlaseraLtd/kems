@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:animated_button/animated_button.dart';
 import 'game_screen.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -20,13 +21,13 @@ class MenuScreen extends StatelessWidget {
                     color: Colors.white,
                     letterSpacing: 8)),
             const SizedBox(height: 60),
-            _MenuButton(label: 'Play', onTap: () {
+            _MenuButton(label: 'PLAY', onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const GameScreen()));
             }),
-            _MenuButton(label: 'Settings', onTap: () {}),
-            _MenuButton(label: 'About', onTap: () {}),
-            _MenuButton(label: 'Quit', onTap: () {
+            _MenuButton(label: 'SETTINGS', onTap: () {}),
+            _MenuButton(label: 'ABOUT', onTap: () {}),
+            _MenuButton(label: 'QUIT', onTap: () {
               SystemNavigator.pop();
             }),
           ],
@@ -44,19 +45,25 @@ class _MenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buttonWidth = MediaQuery.of(context).size.width * 0.7;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: ElevatedButton(
+      child: AnimatedButton(
         onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.green.shade900,
-          minimumSize: const Size(220, 52),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30)),
+        color: const Color(0xFFf64900),
+        width: buttonWidth,
+        height: 52,
+        borderRadius: 8,
+        shadowDegree: ShadowDegree.dark,
+        child: Text(
+          label.toUpperCase(),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2,
+          ),
         ),
-        child: Text(label,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
       ),
     );
   }
