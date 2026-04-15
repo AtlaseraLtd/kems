@@ -473,7 +473,6 @@ class _ScoreBar extends StatelessWidget {
   );
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
@@ -519,11 +518,11 @@ class _ScoreBar extends StatelessWidget {
               Text(
                 'Deal in $countdown',
                 style: TextStyle(
-                  color: countdown <= 3
+                  color: countdown <= 2
                       ? const Color(0xFFFA0505)
                       : countdown == 5
-                      ? const Color(0xFFFAC105)
-                      : Colors.white54,
+                      ? Colors.white54
+                      : const Color(0xFFFAC105),
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),

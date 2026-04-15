@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen>
                   return Column(
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(20),
                         child: LinearProgressIndicator(
                           value: _progressAnim.value,
                           minHeight: 6,
