@@ -1,4 +1,4 @@
-package co.atlasgames.kems
+package co.atlasera.kems
 
 import io.flutter.embedding.android.FlutterActivity
 
