@@ -198,7 +198,7 @@ class _GameScreenState extends State<GameScreen>
         _computerWins >= winsNeeded ||
         _currentRound >= totalRounds;
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (!mounted) return;
       if (gameOver) {
         _showGameOverSafe();
@@ -217,7 +217,7 @@ class _GameScreenState extends State<GameScreen>
       context: ctx,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        backgroundColor: Colors.green.shade900,
+        backgroundColor: Colors.white70,
         title: Text(
           playerWon ? '🏆 You Win!' : '💻 Computer Wins!',
           style: const TextStyle(color: Colors.white, fontSize: 24),
@@ -306,7 +306,7 @@ class _GameScreenState extends State<GameScreen>
                             // Background only covers this area
                             Positioned.fill(
                               child: Image.asset(
-                                'assets/images/poker-table.png',
+                                'assets/images/poker-table-background.png',
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -426,12 +426,14 @@ class _GameScreenState extends State<GameScreen>
                         ),
                         // Resume button
                         onPressed: _togglePause,
-                          child: Image.asset(
-                            'assets/images/icons/play.png',
-                            width: 24,
-                            height: 24,
+                        child: const Text(
+                          'RESUME',
+                          style: TextStyle(
                             color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
                       ),
                     ],
                   ),
@@ -516,7 +518,7 @@ class _ScoreBar extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Deal in $countdown',
+                '$countdown',
                 style: TextStyle(
                   color: countdown <= 2
                       ? const Color(0xFFFA0505)
