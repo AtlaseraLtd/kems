@@ -67,8 +67,8 @@ class _GameScreenState extends State<GameScreen>
 
   /* This method is responsible for playing the swap sound.
   * */
-  void _playSwapSound() async {
-    await _audioPlayer.play(AssetSource('sounds/swap-cards.wav'));
+  void _playSound(String soundName) async {
+    await _audioPlayer.play(AssetSource(soundName));
   }
 
   void _startDealTimer() {
@@ -115,6 +115,7 @@ class _GameScreenState extends State<GameScreen>
         targetRank: _computerTargetRank!,
       );
     });
+    _playSound('sounds/deal-cards.mp3');
     _checkWin();
     _startDealTimer();
   }
@@ -136,6 +137,7 @@ class _GameScreenState extends State<GameScreen>
         targetRank: _computerTargetRank!,
       );
     });
+    _playSound('sounds/deal-cards.mp3');
     _checkWin();
     _startDealTimer();
   }
@@ -157,7 +159,7 @@ class _GameScreenState extends State<GameScreen>
       _tableCards[index] = temp;
       _selectedPlayerIndex = null;
     });
-    _playSwapSound();
+    _playSound('sounds/swap-cards.wav');
     _checkWin();
     _resetDealTimer();
   }
