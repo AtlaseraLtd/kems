@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -370,28 +371,92 @@ class _GameScreenState extends State<GameScreen>
           // ── Win overlay ──
           if (_showWinOverlay)
             Positioned.fill(
-              child: IgnorePointer(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
                 child: Container(
-                  color: Colors.black.withValues(alpha: 0.45),
+                  color: Colors.black.withValues(alpha: 0.5),
                   child: Center(
                     child: ScaleTransition(
                       scale: _winScaleAnim,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 24),
+                        width: 280,
+                        padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: Colors.green.shade800,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              color: Colors.grey, width: 3),
                         ),
-                        child: Text(
-                          _winMessage,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+
+                            // Win message
+                            Text(
+                              _winMessage,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+
+                            const SizedBox(height: 24),
+
+                            // Next game button
+                            AnimatedButton(
+                              onPressed: () {
+                                if (!mounted) return;
+                                final gameOver = _playerWins >= winsNeeded ||
+                                    _computerWins >= winsNeeded ||
+                                    _currentRound >= totalRounds;
+                                if (gameOver) {
+                                  _showGameOverSafe();
+                                } else {
+                                  setState(() => _currentRound++);
+                                  _dealAll();
+                                }
+                              },
+                              color: const Color(0xFFf64900),
+                              width: 220,
+                              height: 48,
+                              borderRadius: 8,
+                              shadowDegree: ShadowDegree.dark,
+                              child: const Text(
+                                'NEXT GAME',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // Home button
+                            AnimatedButton(
+                              onPressed: () {
+                                if (!mounted) return;
+                                Navigator.pop(context);
+                              },
+                              color: Colors.black,
+                              width: 220,
+                              height: 48,
+                              borderRadius: 8,
+                              shadowDegree: ShadowDegree.dark,
+                              child: const Text(
+                                'HOME',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                            ),
+
+                          ],
                         ),
                       ),
                     ),
