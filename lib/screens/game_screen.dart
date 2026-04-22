@@ -194,22 +194,7 @@ class _GameScreenState extends State<GameScreen>
       }
       _showWinOverlay = true;
     });
-
     _winAnimController.forward(from: 0);
-
-    final gameOver = _playerWins >= winsNeeded ||
-        _computerWins >= winsNeeded ||
-        _currentRound >= totalRounds;
-
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!mounted) return;
-      if (gameOver) {
-        _showGameOverSafe();
-      } else {
-        setState(() => _currentRound++);
-        _dealAll();
-      }
-    });
   }
 
   void _showGameOverSafe() {
