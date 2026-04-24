@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:animated_button/animated_button.dart';
+import 'package:kems/screens/settings_screen.dart';
 import 'game_screen.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -25,7 +26,10 @@ class MenuScreen extends StatelessWidget {
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const GameScreen()));
             }),
-            _MenuButton(label: 'SETTINGS', onTap: () {}),
+            _MenuButton(label: 'Settings', onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()));
+            }),
             _MenuButton(label: 'ABOUT', onTap: () {}),
             _MenuButton(label: 'QUIT', onTap: () {
               SystemNavigator.pop();

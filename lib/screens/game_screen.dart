@@ -6,6 +6,7 @@ import 'package:audioplayers/audioplayers.dart';
 import '../models/card_model.dart';
 import '../models/deck_model.dart';
 import '../utils/game_logic.dart';
+import '../utils/settings_manager.dart';
 import '../widgets/playing_card.dart';
 
 class GameScreen extends StatefulWidget {
@@ -44,6 +45,11 @@ class _GameScreenState extends State<GameScreen>
   String _winMessage  = '';
   bool _showWinOverlay = false;
 
+  // Settings
+  bool _soundEnabled   = true;
+  int _timerDuration   = 5;
+  String _cardBack     = 'back-blue';
+
   @override
   void initState() {
     super.initState();
@@ -55,7 +61,7 @@ class _GameScreenState extends State<GameScreen>
       parent: _winAnimController,
       curve: Curves.elasticOut,
     );
-    _dealAll();
+    _loadSettingsAndDeal();
   }
 
   @override
@@ -69,13 +75,13 @@ class _GameScreenState extends State<GameScreen>
   /* This method is responsible for playing the swap sound.
   * */
   void _playSound(String soundName) async {
+    if (!_soundEnabled) return;
     await _audioPlayer.play(AssetSource(soundName));
   }
 
   void _startDealTimer() {
     _dealTimer?.cancel();
-    setState(() => _countdown = 5);
-
+    setState(() => _countdown = _timerDuration);
     _dealTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_showWinOverlay || _isPaused) return;
       setState(() => _countdown--);
@@ -92,6 +98,18 @@ class _GameScreenState extends State<GameScreen>
 
   void _resetDealTimer() {
     _startDealTimer();
+  }
+
+  Future<void> _loadSettingsAndDeal() async {
+    final sound   = await SettingsManager.getSoundEnabled();
+    final timer   = await SettingsManager.getTimerDuration();
+    final cardBack = await SettingsManager.getCardBack();
+    setState(() {
+      _soundEnabled  = sound;
+      _timerDuration = timer;
+      _cardBack      = cardBack;
+    });
+    _dealAll();
   }
 
   // ── Deal all cards (new round) ───────────────────────────────
