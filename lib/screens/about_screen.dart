@@ -107,35 +107,6 @@ class AboutScreen extends StatelessWidget {
                 ),
               ),
             ),
-
-            // ── Back button ──
-            Container(
-              color: Colors.black,
-              padding: EdgeInsets.only(
-                left: 24,
-                right: 24,
-                top: 12,
-                bottom: MediaQuery.of(context).padding.bottom + 12,
-              ),
-              child: AnimatedButton(
-                onPressed: () => Navigator.pop(context),
-                color: const Color(0xFFf64900),
-                width: MediaQuery.of(context).size.width - 48,
-                height: 52,
-                borderRadius: 8,
-                shadowDegree: ShadowDegree.dark,
-                child: const Text(
-                  'BACK',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
-                  ),
-                ),
-              ),
-            ),
-
           ],
         ),
       ),
