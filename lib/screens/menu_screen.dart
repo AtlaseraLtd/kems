@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:animated_button/animated_button.dart';
 import 'package:kems/screens/settings_screen.dart';
 import 'game_screen.dart';
+import 'about_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -30,7 +31,8 @@ class MenuScreen extends StatelessWidget {
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const SettingsScreen()));
             }),
-            _MenuButton(label: 'ABOUT', onTap: () {}),
+            _MenuButton(label: 'ABOUT', onTap: () {Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const AboutScreen()));}),
             _MenuButton(label: 'QUIT', onTap: () {
               SystemNavigator.pop();
             }),

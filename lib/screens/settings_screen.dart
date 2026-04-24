@@ -1,6 +1,7 @@
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
 import '../utils/settings_manager.dart';
+import 'about_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -235,12 +236,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                             const SizedBox(width: 24),
                             _CardBackOption(
-                              assetPath: 'assets/cards/back-green.png',
-                              label: 'Green',
-                              isSelected: _cardBack == 'back-green',
+                              assetPath: 'assets/cards/back-red.png',
+                              label: 'Red',
+                              isSelected: _cardBack == 'back-red',
                               onTap: () async {
-                                setState(() => _cardBack = 'back-green');
-                                await SettingsManager.setCardBack('back-green');
+                                setState(() => _cardBack = 'back-red');
+                                await SettingsManager.setCardBack('back-red');
+                              },
+                            ),
+                            const SizedBox(width: 24),
+                            _CardBackOption(
+                              assetPath: 'assets/cards/back-red.png',
+                              label: 'Green',
+                              isSelected: _cardBack == 'back-red',
+                              onTap: () async {
+                                setState(() => _cardBack = 'back-red');
+                                await SettingsManager.setCardBack('back-red');
+                              },
+                            ),
+                            const SizedBox(width: 24),
+                            _CardBackOption(
+                              assetPath: 'assets/cards/back-red.png',
+                              label: 'Yellow',
+                              isSelected: _cardBack == 'back-red',
+                              onTap: () async {
+                                setState(() => _cardBack = 'back-red');
+                                await SettingsManager.setCardBack('back-red');
                               },
                             ),
                           ],
@@ -273,7 +294,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         _InfoRow(
                           label: 'About',
                           onTap: () {
-                            // TODO: open about screen
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (_) => const AboutScreen()));
                           },
                         ),
                       ],
