@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:kems/screens/settings_screen.dart';
 import '../models/card_model.dart';
 import '../models/deck_model.dart';
 import '../utils/game_logic.dart';
@@ -35,6 +36,7 @@ class _GameScreenState extends State<GameScreen>
   int _countdown = 5;
   static const int totalRounds = 5;
   static const int winsNeeded  = 3;
+  int _allTimeWins = 0;
 
   // Computer AI
   Rank? _computerTargetRank;
@@ -204,6 +206,7 @@ class _GameScreenState extends State<GameScreen>
       _lastRoundPlayerWon = playerWon;
       if (playerWon) {
         _playerWins++;
+        _allTimeWins++;
         _winMessage = '🎉 You got Kems!';
       } else {
         _computerWins++;
@@ -324,6 +327,13 @@ class _GameScreenState extends State<GameScreen>
                             // Card zones
                             Column(
                               children: [
+                                _TopBar(
+                                  allTimeWins: _allTimeWins,
+                                  onSettings: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) => const SettingsScreen()));
+                                  },
+                                ),
                                 _StaticCardZone(
                                   height: zoneHeight,
                                   width: screenWidth,
@@ -510,6 +520,66 @@ class _GameScreenState extends State<GameScreen>
                 ),
               ),
             ),
+
+        ],
+      ),
+    );
+  }
+}
+// ── Top Bar ───────────────────────────────────────────────────
+
+class _TopBar extends StatelessWidget {
+  final int allTimeWins;
+  final VoidCallback onSettings;
+
+  const _TopBar({
+    required this.allTimeWins,
+    required this.onSettings,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black.withValues(alpha: 0.5),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+
+          // All time wins
+          Row(
+            children: [
+              const Icon(Icons.emoji_events,
+                  color: Color(0xFFf64900), size: 16),
+              const SizedBox(width: 4),
+              Text(
+                '$allTimeWins wins',
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+
+          // Opponent label
+          const Text(
+            'OPPONENT',
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2,
+            ),
+          ),
+
+          // Settings icon
+          GestureDetector(
+            onTap: onSettings,
+            child: const Icon(Icons.settings,
+                color: Colors.white70, size: 20),
+          ),
 
         ],
       ),

@@ -246,22 +246,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                             const SizedBox(width: 24),
                             _CardBackOption(
-                              assetPath: 'assets/cards/back-red.png',
+                              assetPath: 'assets/cards/back-green.png',
                               label: 'Green',
-                              isSelected: _cardBack == 'back-red',
+                              isSelected: _cardBack == 'back-green',
                               onTap: () async {
-                                setState(() => _cardBack = 'back-red');
-                                await SettingsManager.setCardBack('back-red');
+                                setState(() => _cardBack = 'back-green');
+                                await SettingsManager.setCardBack('back-green');
                               },
                             ),
                             const SizedBox(width: 24),
                             _CardBackOption(
-                              assetPath: 'assets/cards/back-red.png',
-                              label: 'Yellow',
-                              isSelected: _cardBack == 'back-red',
+                              assetPath: 'assets/cards/back-black.png',
+                              label: 'Black',
+                              isSelected: _cardBack == 'back-black',
                               onTap: () async {
-                                setState(() => _cardBack = 'back-red');
-                                await SettingsManager.setCardBack('back-red');
+                                setState(() => _cardBack = 'back-black');
+                                await SettingsManager.setCardBack('back-black');
                               },
                             ),
                           ],
