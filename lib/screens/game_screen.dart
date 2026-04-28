@@ -30,13 +30,13 @@ class _GameScreenState extends State<GameScreen>
 
   // Scoring
   int _playerWins   = 0;
+  int _allTimeWins = 0;
   int _computerWins = 0;
   int _currentRound = 1;
   Timer? _dealTimer;
   int _countdown = 5;
   static const int totalRounds = 5;
   static const int winsNeeded  = 3;
-  int _allTimeWins = 0;
 
   // Computer AI
   Rank? _computerTargetRank;
@@ -286,8 +286,8 @@ class _GameScreenState extends State<GameScreen>
                 final availableHeight = constraints.maxHeight;
                 final scoreBarHeight = MediaQuery.of(context).padding.top + 70.0;
                 final remainingHeight = availableHeight - scoreBarHeight;
-                final zoneHeight = (remainingHeight - 30) * 0.30;
-                final barHeight  = (remainingHeight - 30) * 0.10;
+                final zoneHeight = (remainingHeight - 30 - 36) * 0.30;
+                final barHeight  = (remainingHeight - 30 - 36) * 0.10;
                 final cardWidth  = (screenWidth - (3 * 6) - 32) / 4;
                 final cardHeight =
                 (cardWidth * 1.4).clamp(0.0, zoneHeight * 0.80);

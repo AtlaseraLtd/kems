@@ -100,7 +100,7 @@ class _SplashScreenState extends State<SplashScreen>
                         '${(_progressAnim.value * 100).toInt()}%',
                         style: const TextStyle(
                           color: Colors.white38,
-                          fontSize: 12,
+                          fontSize: 20,
                         ),
                       ),
                     ],

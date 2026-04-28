@@ -225,6 +225,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            // Option 1: Blue back
                             _CardBackOption(
                               assetPath: 'assets/cards/back-blue.png',
                               label: 'Blue',
@@ -235,6 +236,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               },
                             ),
                             const SizedBox(width: 24),
+                            // Option 2: Red back
                             _CardBackOption(
                               assetPath: 'assets/cards/back-red.png',
                               label: 'Red',
