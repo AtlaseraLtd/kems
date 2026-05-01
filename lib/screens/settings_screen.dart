@@ -163,7 +163,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 color: Colors.white, fontSize: 15)),
                         Switch(
                           value: _soundEnabled,
-                          activeColor: const Color(0xFFf64900),
+                          activeThumbColor: const Color(0xFFf64900),
                           onChanged: (val) async {
                             setState(() => _soundEnabled = val);
                             await SettingsManager.setSoundEnabled(val);

@@ -1,4 +1,3 @@
-import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
 
 class AboutScreen extends StatelessWidget {
