@@ -11,7 +11,7 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green.shade900,
+      backgroundColor: const Color(0xFFf64900),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
