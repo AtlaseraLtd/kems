@@ -9,6 +9,7 @@ class GameLogic {
     return hand.every((c) => c.rank == rank);
   }
 
+  // Turn computer's cards face up
   static void revealComputerHand(List<CardModel> computerHand) {
     for (var c in computerHand) {
       c.isFaceUp = true;
@@ -20,7 +21,7 @@ class GameLogic {
     return computerHand[Random().nextInt(computerHand.length)].rank;
   }
 
-  // Called after initial deal and after every player Deal press
+  // Called after initial deal and after every player deal press
   static void computerScanAndSwap({
     required List<CardModel> computerHand,
     required List<CardModel> tableCards,
